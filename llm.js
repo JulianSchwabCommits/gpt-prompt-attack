@@ -1,19 +1,22 @@
-const WEBHOOK_URL = "https://n8n.julianschwab.dev/webhook/chat";
+const ENDPOINTS = {
+  gemini: "https://n8n.julianschwab.dev/webhook/chat-gemini",
+  local:  "https://n8n.julianschwab.dev/webhook/chat-local",
+};
 
 /**
- * Send a prompt to the n8n webhook and stream the response token by token.
- *
- * @param {string} prompt - The user prompt to send.
- * @param {object} [options] - Optional settings.
- * @param {string} [options.systemPrompt] - System prompt / level instructions.
- * @param {(token: string) => void} [options.onToken] - Called for each streamed token.
- * @param {() => void} [options.onStart] - Called when the stream begins.
- * @param {() => void} [options.onEnd] - Called when the stream ends.
- * @param {(error: Error) => void} [options.onError] - Called on error.
- * @returns {Promise<string>} The full assembled response text.
+ * Send a prompt to an n8n webhook and stream the response token by token.
+ * @param {string} prompt
+ * @param {object} [options]
+ * @param {string} [options.model] - "gemini" or "local" (default: "gemini")
+ * @param {string} [options.systemPrompt]
+ * @param {(token: string) => void} [options.onToken]
+ * @param {() => void} [options.onStart]
+ * @param {() => void} [options.onEnd]
+ * @param {(error: Error) => void} [options.onError]
+ * @returns {Promise<string>}
  */
 export async function streamChat(prompt, options = {}) {
-  const { systemPrompt, onToken, onStart, onEnd, onError } = options;
+  const { model = "gemini", systemPrompt, onToken, onStart, onEnd, onError } = options;
 
   const body = { prompt };
   if (systemPrompt) {
@@ -23,7 +26,8 @@ export async function streamChat(prompt, options = {}) {
   let fullText = "";
 
   try {
-    const response = await fetch(WEBHOOK_URL, {
+    const url = ENDPOINTS[model] || ENDPOINTS.gemini;
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

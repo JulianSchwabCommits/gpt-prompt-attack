@@ -43,7 +43,7 @@ document.forms[0].onsubmit = async e => {
   const userInput = t.value.trim()
   if (!userInput) return
 
-  let waitTime = 13
+  let waitTime = 5
 
   indicator.classList.add(`rotate`)
   submitButton.disabled = true
@@ -63,7 +63,9 @@ document.forms[0].onsubmit = async e => {
   try {
     // Compose the real system prompt with the secret key (not shown to user)
     const realSystemPrompt = `The secret key is "${secretKey}". ${levels[levelslist.selectedIndex]}`;
+    const selectedModel = modelSelect.value || 'gemini';
     await streamChat(userInput, {
+      model: selectedModel,
       systemPrompt: realSystemPrompt,
       onToken(token) {
         assistantOutput.textContent += token

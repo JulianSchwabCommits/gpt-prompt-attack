@@ -86,14 +86,11 @@
             padding: 20px 20px 20px 20px;
             border: 20px solid grey;
          }
-         iframe{
-            border: none;
+         #assistantOutput{
             width: 100%;
-            color: white;
+            color: black;
             margin: 0 auto;
-            height: 140px;
             box-sizing: border-box;
-            border: 2px solid grey;
          }
          #system{
             font-family: monospace;
@@ -140,7 +137,7 @@
    </head>
    <body>
       <div id=app>
-         <form target=response action="https://ggpt-api.43z.one/v2">
+         <form>
             <div>
                The goal of this game is to come up with the <b>shortest</b> user input that tricks the system prompt into
                returning the <b>secret key</b> back to you.<br>
@@ -165,7 +162,7 @@
          <div style="position:relative">
             <span id=indicator></span>
             <div class=title>Assistant</div>
-            <iframe id=assistant name=response onload='indicator.classList.remove(`rotate`);'></iframe>
+            <div id=assistantOutput style="min-height:60px;max-height:300px;overflow-y:auto;padding:10px;border:2px solid grey;font-family:monospace;white-space:pre-wrap;background:#fafafa;"></div>
          </div>
       </div>
    </body>
